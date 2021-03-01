@@ -6,25 +6,25 @@
            <div class="row mt-3">
               <div class="col-md-4 order-sm-last">
                  <div class="home-block__search-city mt-2">
-              <div>
+                 <div>
                 <label for="city">Введите название города</label>
-              </div>
-              <form @submit.prevent="submit">
-                 <div class="row pl-3">
-                    <div class="col-8 p-0">
-                       <div class="form-group">
-                          <input type="text" placeholder="город" v-model="title" class="form-control" id="city">
+                </div>
+                 <form @submit.prevent="submit">
+                    <div class="row pl-3">
+                       <div class="col-8 p-0">
+                          <div class="form-group">
+                             <input type="text" placeholder="город" v-model="title" class="form-control" id="city">
+                          </div>
+                       </div>
+                       <div class="col-4 p-0">
+                          <button type="submit" class="btn-ok rounded-circle p-2 ml-3">OK</button>
                        </div>
                     </div>
-                    <div class="col-4 p-0">
-                       <button type="submit" class="btn-ok rounded-circle p-2 ml-3">OK</button>
-                    </div>
-                 </div>
-              </form>
-           </div>
+                 </form>
+              </div>
 
-           <div class="home-block__additional-info mt-4">
-              <h6>Дополнительная информация</h6>
+              <div class="home-block__additional-info mt-4">
+                <h6>Дополнительная информация</h6>
               <div class="header-block__name-city pt-2">
                 <span>Город: </span><span><b>{{ name }}</b></span>
               </div>
@@ -48,9 +48,12 @@
                  </p>
               </div>
            </div>
-        </div>
 
-        <popap></popap>
+            <router-link to="/info">
+              <button class="button-info mt-3">Info city</button>
+            </router-link>
+
+        </div>
 
         <div class="col-md-8 order-sm-first">
            <div class="home-block__cards">
@@ -63,10 +66,9 @@
               />
 
            </div>
-         </div>
+        </div>
        </div>
      </div>
-
 
     </div>
   </div>
@@ -75,7 +77,6 @@
 <script>
 // @ is an alias to /src
 import cartCity from "@/components/Home/CartCity.vue";
-import popap from "@/components/Popaps/Popap.vue";
 import { mapGetters, mapActions, mapMutations} from "vuex";
 
 export default {
@@ -83,21 +84,21 @@ export default {
   data() {
     return {
       title: "",
-      name: "",
-      temp_max: "",
-      temp_min: "",
-      humidity: "",
-      pressure: "",
-      visibility: "",
-      wind_deg: "",
-      wind_speed: ""
+      name: localStorage.getItem('name'),
+      temp_max: localStorage.getItem('temp_max'),
+      temp_min: localStorage.getItem('temp_min'),
+      humidity: localStorage.getItem('pressure'),
+      pressure: localStorage.getItem('humidity'),
+      visibility: localStorage.getItem('visibility'),
+      wind_deg: localStorage.getItem('wind_deg'),
+      wind_speed: localStorage.getItem('wind_speed')
     }
   },
   computed: mapGetters(["pullState"]),
 
   methods: {
     ...mapActions(["infoWeather", "infoCity", "updateCart"]),
-    ...mapMutations(["createNewCity", "deleteCity"]),
+    ...mapMutations(["createNewCity", "deleteCity", "getCity"]),
 
     removeCart(name) {
       this.deleteCity(name);
@@ -118,7 +119,18 @@ export default {
     },
 
     additionalInfoCity(obj) {
-      console.log( obj );
+
+      this.getCity(obj);
+
+      localStorage.setItem('name', obj.name);
+      localStorage.setItem('temp_max', Math.round(obj.main.temp_max - 273 ));
+      localStorage.setItem('temp_min', Math.round(obj.main.temp_min - 273 ));
+      localStorage.setItem('pressure', Math.round(obj.main.pressure * 0.00750063755419211*100 ) + " мм.р.с");
+      localStorage.setItem('humidity', obj.main.humidity + "%");
+      localStorage.setItem('visibility', obj.visibility/1000 + "км");
+      localStorage.setItem('wind_deg', obj.wind.deg);
+      localStorage.setItem('wind_speed', obj.wind.speed + "м/с");
+
       this.name = obj.name;
       this.temp_max = Math.round(obj.main.temp_max - 273 );
       this.temp_min = Math.round(obj.main.temp_min - 273 );
@@ -140,7 +152,6 @@ export default {
 
   components: {
     cartCity,
-    popap
   }
 }
 </script>
@@ -159,5 +170,17 @@ export default {
   background: rgba(234, 91, 203, 0.99);
   box-shadow: 0px 0px 12px #333,
   inset 0px 0px 3px #333;
+}
+.button-info {
+  border: none;
+  background: #de6731;
+  color: #ffffff;
+  width: 200px;
+  padding: 3px;
+  outline: none;
+  border-radius: 9px;
+}
+.button-info:hover {
+  background: grey;
 }
 </style>

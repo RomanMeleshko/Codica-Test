@@ -12,6 +12,10 @@
 
            </div>
 
+             <router-link class="" to="/">
+                <button class="header_button">home</button>
+             </router-link>
+
           </nav>
 
         </div>
@@ -52,6 +56,19 @@ export default {
   display: none;
   border-radius: 4px;
 
+}
+.header_button {
+  height: 50px;
+  width: 100px;
+  border: none;
+  color: #333;
+  outline: none;
+  text-transform: uppercase;
+  border-radius: 10px;
+}
+.header_button:hover {
+  background: grey;
+  color: #ffffff;
 }
 @media (max-width: 768px) {
   .navbar-button {

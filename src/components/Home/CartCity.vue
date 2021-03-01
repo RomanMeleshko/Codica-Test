@@ -47,6 +47,8 @@ export default {
 
   methods: {
 
+
+
   }
 
 }
@@ -110,5 +112,8 @@ export default {
   font-weight: bold;
   text-align: center;
   border: 2px solid red;
+}
+.home-block__cart-city {
+  font-size: 20px;
 }
 </style>

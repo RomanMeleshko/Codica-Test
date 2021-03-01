@@ -2,16 +2,26 @@
 
 export default {
     state: {
-        result_cities: []
+        result_cities: [],
+        city: null
     },
     actions: {
 
         infoWeather: async function (context) {
             let key = "cdadd613c8d4235e8a72fca5c38c7009";
-            let cities = ["Kiev", "Odessa", "Lviv", "Kharkiv"];
+            let cities = ["Kiev", "Odessa", "Lviv", "Kharkiv"]; // default statick value of the city at the Home Page
             let data_city;
             let city;
             let arr = [];
+
+            function getCookie(name) {
+                let matches = document.cookie.match(new RegExp(
+                    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+                ));
+                return matches ? decodeURIComponent(matches[1]) : undefined;
+            }
+
+            cities.push(getCookie("city")); // add custom citys
 
             for (var i = 0; i < cities.length; i++) {
                 data_city = await fetch(
@@ -30,6 +40,8 @@ export default {
             let key = "cdadd613c8d4235e8a72fca5c38c7009";
             let _city;
 
+            document.cookie = encodeURIComponent("city") + '=' + encodeURIComponent(city);
+
             let data = await fetch(
                 "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + key
             )
@@ -44,7 +56,7 @@ export default {
 
             let key = "cdadd613c8d4235e8a72fca5c38c7009";
             let updated_city;
-
+          //  console.log( city );
             let data = await fetch(
                 "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + key
             )
@@ -81,11 +93,18 @@ export default {
                 }
             }
 
+        },
+        getCity(state, obj) {
+            state.city = obj;
+
         }
     },
     getters: {
         pullState(state) {
             return state.result_cities;
+        },
+        pullCity(state) {
+            return state.city;
         }
     }
 }

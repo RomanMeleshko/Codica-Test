@@ -12,7 +12,8 @@
         <div class="content-wrapper">
            <div class="contant">
               <div class="row">
-                <Home></Home>
+                <router-view></router-view>
+
 
               </div>
            </div>
@@ -26,11 +27,7 @@
            </footer>
         </div>
 
-
     </div>
-
-<!--      <fish-button loading type="positive">Loading</fish-button>-->
-<!--      <fish-button loading type="primary">Loading</fish-button>-->
 
   </div>
 </template>
@@ -61,5 +58,4 @@
 
 <style>
  @import "css/app.css";
-
 </style>
